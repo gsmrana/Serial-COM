@@ -171,6 +171,16 @@ namespace Serial_COM
             else toolStripPortDetails.Text = portName;
         }
 
+        public static string EncodeNumConfig(int[] param)
+        {
+            return string.Join(",", param);
+        }
+
+        public static int DecodeNumConfig(string config, int index)
+        {
+            return int.Parse(config.Split(',')[index]);
+        }
+
         public static string ByteArrayToFormatedString(byte[] bytes)
         {
             var sb = new StringBuilder();
@@ -222,11 +232,6 @@ namespace Serial_COM
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-
-        }
-
-        private void MainForm_Shown(object sender, EventArgs e)
-        {
             try
             {
                 UpdateSerialPortNames();
@@ -237,11 +242,31 @@ namespace Serial_COM
                     comboBoxPortName.SelectedIndex = comboBoxPortName.Items.IndexOf(Config.PortName);
                 if (comboBoxBaudRate.Items.Contains(Config.BaudRate))
                     comboBoxBaudRate.SelectedIndex = comboBoxBaudRate.Items.IndexOf(Config.BaudRate);
+                this.Size = new Size(DecodeNumConfig(Config.WindowSize, 0), DecodeNumConfig(Config.WindowSize, 1));
+                var winlocation = new Point(DecodeNumConfig(Config.WindowLocation, 0), DecodeNumConfig(Config.WindowLocation, 1));
 
+                // check location within screen bounds
+                if (winlocation.X >= Screen.AllScreens.Sum(p => p.Bounds.Width))
+                {
+                    winlocation.X = (Screen.PrimaryScreen.Bounds.Width - this.Width) / 2;
+                    winlocation.Y = (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2;
+                }
+                this.Location = winlocation;
+            }
+            catch (Exception ex)
+            {
+                PopupException(ex.Message);
+            }
+        }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            try
+            {
                 MonitorDeviceChanges();
-                toolStripStatusLabel1.Text = "Ready to Connect";
                 labelRxSelection.Text = "RxSel: 0";
                 labelTxSelection.Text = "TxSel: 0";
+                toolStripStatusLabel1.Text = "Ready to Connect";
             }
             catch (Exception ex)
             {
@@ -258,6 +283,8 @@ namespace Serial_COM
                     portName = _portNames[comboBoxPortName.SelectedIndex];
                 Config.PortName = portName;
                 Config.BaudRate = comboBoxBaudRate.Text;
+                Config.WindowSize = EncodeNumConfig(new[] { this.Size.Width, this.Size.Height });
+                Config.WindowLocation = EncodeNumConfig(new[] { this.Location.X, this.Location.Y });
                 Config.Save();
                 _serialCom.Dispose();
             }

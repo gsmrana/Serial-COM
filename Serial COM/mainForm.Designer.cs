@@ -47,6 +47,7 @@
             this.toolStripMenuItemTxAppendTs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.sendOnKeyPressToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAllOnSendToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.decodeAutoToolStripMenuItemRx = new System.Windows.Forms.ToolStripMenuItem();
             this.decodeASCIIToolStripMenuItemRx = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,13 +78,12 @@
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.labelTxSelection = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBoxRx = new System.Windows.Forms.GroupBox();
-            this.richTextBoxExEventLog = new RichTextBoxEx();
+            this.richTextBoxExEventLog = new Serial_COM.RichTextBoxEx();
             this.contextMenuStripRx = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItemRx = new System.Windows.Forms.ToolStripMenuItem();
             this.copyAllToolStripMenuItemRx = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxTx = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.buttonSend = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.richTextBoxTxData = new System.Windows.Forms.RichTextBox();
             this.contextMenuStripTx = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -92,13 +92,17 @@
             this.pasteToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.selectAllToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
+            this.listViewTxHistory = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.buttonSend = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonList = new System.Windows.Forms.ToolStripButton();
             this.comboBoxPortName = new System.Windows.Forms.ToolStripComboBox();
             this.comboBoxBaudRate = new System.Windows.Forms.ToolStripComboBox();
             this.buttonConnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonCopyText = new System.Windows.Forms.ToolStripButton();
             this.ButtonClear = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonList = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -127,7 +131,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 761);
             this.tableLayoutPanel1.TabIndex = 0;
@@ -163,7 +167,7 @@
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItemNew_Click);
             // 
@@ -173,19 +177,19 @@
             this.saveAsToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.saveAsToolStripMenuItem.Text = "&Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItemSaveAs_Click);
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator.Size = new System.Drawing.Size(151, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItemExit_Click);
             // 
@@ -202,7 +206,8 @@
             this.toolStripMenuItemTxAppendNL,
             this.toolStripMenuItemTxAppendTs,
             this.toolStripSeparator3,
-            this.sendOnKeyPressToolStripMenuItemTx});
+            this.sendOnKeyPressToolStripMenuItemTx,
+            this.selectAllOnSendToolStripMenuItemTx});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(45, 20);
             this.toolStripMenuItem1.Text = "&Send";
@@ -273,6 +278,14 @@
             this.sendOnKeyPressToolStripMenuItemTx.Size = new System.Drawing.Size(180, 22);
             this.sendOnKeyPressToolStripMenuItemTx.Text = "Send on Key Press";
             this.sendOnKeyPressToolStripMenuItemTx.Click += new System.EventHandler(this.ToolStripMenuItemTxSendOnKeyPress_Click);
+            // 
+            // selectAllOnSendToolStripMenuItemTx
+            // 
+            this.selectAllOnSendToolStripMenuItemTx.CheckOnClick = true;
+            this.selectAllOnSendToolStripMenuItemTx.Name = "selectAllOnSendToolStripMenuItemTx";
+            this.selectAllOnSendToolStripMenuItemTx.Size = new System.Drawing.Size(180, 22);
+            this.selectAllOnSendToolStripMenuItemTx.Text = "Select All On Send";
+            this.selectAllOnSendToolStripMenuItemTx.Click += new System.EventHandler(this.SelectAllOnSendToolStripMenuItemTx_Click);
             // 
             // toolStripMenuItem2
             // 
@@ -376,7 +389,7 @@
             this.toolStripMenuItemAwaysOnTop.CheckOnClick = true;
             this.toolStripMenuItemAwaysOnTop.Name = "toolStripMenuItemAwaysOnTop";
             this.toolStripMenuItemAwaysOnTop.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
-            this.toolStripMenuItemAwaysOnTop.Size = new System.Drawing.Size(190, 22);
+            this.toolStripMenuItemAwaysOnTop.Size = new System.Drawing.Size(220, 22);
             this.toolStripMenuItemAwaysOnTop.Text = "Always on Top";
             this.toolStripMenuItemAwaysOnTop.CheckedChanged += new System.EventHandler(this.ToolStripMenuItemAwaysOnTop_CheckedChanged);
             // 
@@ -401,7 +414,7 @@
             // ToolStripMenuItemOptions
             // 
             this.ToolStripMenuItemOptions.Name = "ToolStripMenuItemOptions";
-            this.ToolStripMenuItemOptions.Size = new System.Drawing.Size(190, 22);
+            this.ToolStripMenuItemOptions.Size = new System.Drawing.Size(220, 22);
             this.ToolStripMenuItemOptions.Text = "&Options";
             // 
             // helpToolStripMenuItem
@@ -516,7 +529,7 @@
             this.groupBoxRx.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxRx.Location = new System.Drawing.Point(3, 53);
             this.groupBoxRx.Name = "groupBoxRx";
-            this.groupBoxRx.Size = new System.Drawing.Size(828, 561);
+            this.groupBoxRx.Size = new System.Drawing.Size(828, 531);
             this.groupBoxRx.TabIndex = 6;
             this.groupBoxRx.TabStop = false;
             this.groupBoxRx.Text = "Receive";
@@ -526,11 +539,13 @@
             this.richTextBoxExEventLog.Autoscroll = true;
             this.richTextBoxExEventLog.BackColor = System.Drawing.SystemColors.Window;
             this.richTextBoxExEventLog.ContextMenuStrip = this.contextMenuStripRx;
+            this.richTextBoxExEventLog.DetectUrls = false;
             this.richTextBoxExEventLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxExEventLog.HideSelection = false;
             this.richTextBoxExEventLog.Location = new System.Drawing.Point(3, 16);
             this.richTextBoxExEventLog.Name = "richTextBoxExEventLog";
             this.richTextBoxExEventLog.ReadOnly = true;
-            this.richTextBoxExEventLog.Size = new System.Drawing.Size(822, 542);
+            this.richTextBoxExEventLog.Size = new System.Drawing.Size(822, 512);
             this.richTextBoxExEventLog.TabIndex = 0;
             this.richTextBoxExEventLog.Text = "";
             this.richTextBoxExEventLog.SelectionChanged += new System.EventHandler(this.RichTextBoxExEventLog_SelectionChanged);
@@ -562,38 +577,29 @@
             // 
             this.groupBoxTx.Controls.Add(this.tableLayoutPanel2);
             this.groupBoxTx.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxTx.Location = new System.Drawing.Point(3, 620);
+            this.groupBoxTx.Location = new System.Drawing.Point(3, 590);
             this.groupBoxTx.Name = "groupBoxTx";
-            this.groupBoxTx.Size = new System.Drawing.Size(828, 114);
+            this.groupBoxTx.Size = new System.Drawing.Size(828, 144);
             this.groupBoxTx.TabIndex = 5;
             this.groupBoxTx.TabStop = false;
             this.groupBoxTx.Text = "Send";
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnCount = 3;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.buttonSend, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.panel1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.listViewTxHistory, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.buttonSend, 2, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(822, 95);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(822, 125);
             this.tableLayoutPanel2.TabIndex = 5;
-            // 
-            // buttonSend
-            // 
-            this.buttonSend.Font = new System.Drawing.Font("Cambria", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSend.Location = new System.Drawing.Point(725, 3);
-            this.buttonSend.Name = "buttonSend";
-            this.buttonSend.Size = new System.Drawing.Size(91, 45);
-            this.buttonSend.TabIndex = 4;
-            this.buttonSend.Text = "&Send";
-            this.buttonSend.UseVisualStyleBackColor = true;
-            this.buttonSend.Click += new System.EventHandler(this.ButtonSend_Click);
             // 
             // panel1
             // 
@@ -601,16 +607,18 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(716, 89);
+            this.panel1.Size = new System.Drawing.Size(466, 119);
             this.panel1.TabIndex = 5;
             // 
             // richTextBoxTxData
             // 
             this.richTextBoxTxData.ContextMenuStrip = this.contextMenuStripTx;
+            this.richTextBoxTxData.DetectUrls = false;
             this.richTextBoxTxData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxTxData.HideSelection = false;
             this.richTextBoxTxData.Location = new System.Drawing.Point(0, 0);
             this.richTextBoxTxData.Name = "richTextBoxTxData";
-            this.richTextBoxTxData.Size = new System.Drawing.Size(716, 89);
+            this.richTextBoxTxData.Size = new System.Drawing.Size(466, 119);
             this.richTextBoxTxData.TabIndex = 0;
             this.richTextBoxTxData.Text = "";
             this.richTextBoxTxData.SelectionChanged += new System.EventHandler(this.RichTextBoxTxData_SelectionChanged);
@@ -663,6 +671,46 @@
             this.selectAllToolStripMenuItemTx.Text = "Select All";
             this.selectAllToolStripMenuItemTx.Click += new System.EventHandler(this.SelectAllToolStripMenuItemTx_Click);
             // 
+            // listViewTxHistory
+            // 
+            this.listViewTxHistory.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.listViewTxHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewTxHistory.FullRowSelect = true;
+            this.listViewTxHistory.GridLines = true;
+            this.listViewTxHistory.HideSelection = false;
+            this.listViewTxHistory.Location = new System.Drawing.Point(475, 3);
+            this.listViewTxHistory.MultiSelect = false;
+            this.listViewTxHistory.Name = "listViewTxHistory";
+            this.listViewTxHistory.Size = new System.Drawing.Size(244, 119);
+            this.listViewTxHistory.TabIndex = 8;
+            this.listViewTxHistory.UseCompatibleStateImageBehavior = false;
+            this.listViewTxHistory.View = System.Windows.Forms.View.Details;
+            this.listViewTxHistory.SelectedIndexChanged += new System.EventHandler(this.ListViewTxHistory_SelectedIndexChanged);
+            this.listViewTxHistory.DoubleClick += new System.EventHandler(this.ListViewTxHistory_DoubleClick);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "#";
+            this.columnHeader1.Width = 20;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Send History";
+            this.columnHeader2.Width = 200;
+            // 
+            // buttonSend
+            // 
+            this.buttonSend.Font = new System.Drawing.Font("Cambria", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSend.Location = new System.Drawing.Point(725, 3);
+            this.buttonSend.Name = "buttonSend";
+            this.buttonSend.Size = new System.Drawing.Size(88, 45);
+            this.buttonSend.TabIndex = 0;
+            this.buttonSend.Text = "&Send";
+            this.buttonSend.UseVisualStyleBackColor = true;
+            this.buttonSend.Click += new System.EventHandler(this.ButtonSend_Click);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -677,6 +725,16 @@
             this.toolStrip1.Size = new System.Drawing.Size(834, 25);
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonList
+            // 
+            this.toolStripButtonList.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripButtonList.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonList.Image")));
+            this.toolStripButtonList.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonList.Name = "toolStripButtonList";
+            this.toolStripButtonList.Size = new System.Drawing.Size(97, 22);
+            this.toolStripButtonList.Text = "Serial Ports";
+            this.toolStripButtonList.Click += new System.EventHandler(this.ToolStripButtonList_Click);
             // 
             // comboBoxPortName
             // 
@@ -728,25 +786,15 @@
             this.ButtonClear.Text = "Clear";
             this.ButtonClear.Click += new System.EventHandler(this.ToolStripButtonClear_Click);
             // 
-            // toolStripButtonList
-            // 
-            this.toolStripButtonList.Font = new System.Drawing.Font("Cambria", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripButtonList.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonList.Image")));
-            this.toolStripButtonList.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonList.Name = "toolStripButtonList";
-            this.toolStripButtonList.Size = new System.Drawing.Size(97, 22);
-            this.toolStripButtonList.Text = "Serial Ports";
-            this.toolStripButtonList.Click += new System.EventHandler(this.ToolStripButtonList_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(834, 761);
-            this.MinimumSize = new System.Drawing.Size(430, 370);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MinimumSize = new System.Drawing.Size(430, 370);
             this.Name = "MainForm";
             this.Text = "Serial COM";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
@@ -841,6 +889,10 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
         private System.Windows.Forms.ToolStripStatusLabel labelTxSelection;
         private System.Windows.Forms.ToolStripButton toolStripButtonList;
+        private System.Windows.Forms.ToolStripMenuItem selectAllOnSendToolStripMenuItemTx;
+        private System.Windows.Forms.ListView listViewTxHistory;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
     }
 }
 

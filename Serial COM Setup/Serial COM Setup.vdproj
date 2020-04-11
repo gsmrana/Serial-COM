@@ -15,26 +15,26 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_2BE710863CB7F1C84D55C4D1F57AB07B"
+        "OwnerKey" = "8:_C4FDB6520830461E885BDAD3CABFE6E5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_C4FDB6520830461E885BDAD3CABFE6E5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_E5B4751F1EA257F2914190680D8F8BFB"
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C4FDB6520830461E885BDAD3CABFE6E5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_E5B4751F1EA257F2914190680D8F8BFB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C4FDB6520830461E885BDAD3CABFE6E5"
+        "OwnerKey" = "8:_2BE710863CB7F1C84D55C4D1F57AB07B"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -55,6 +55,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -71,6 +79,17 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                }
+            }
         }
     }
     "Deployable"
@@ -92,7 +111,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.6.1"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.0"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=671728"
                 }
@@ -100,14 +119,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E5B4751F1EA257F2914190680D8F8BFB"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2BE710863CB7F1C84D55C4D1F57AB07B"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Megamind.IO.Serial, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_E5B4751F1EA257F2914190680D8F8BFB"
+                    "_2BE710863CB7F1C84D55C4D1F57AB07B"
                     {
                     "Name" = "8:Megamind.IO.Serial.dll"
                     "Attributes" = "3:512"
@@ -198,15 +217,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Serial COM"
-        "ProductCode" = "8:{638A9152-D3AC-4465-9C1F-C9136D9C0E18}"
-        "PackageCode" = "8:{53C8D45D-C5B0-48DA-BFC9-C25B61221718}"
+        "ProductCode" = "8:{7DD5F630-04D5-4A6A-AABC-2D82716AF921}"
+        "PackageCode" = "8:{29A8456B-5E7E-4EA6-A1DB-9F772BB674D2}"
         "UpgradeCode" = "8:{9D3C6EE9-FFE0-4C52-A09C-B26A438AD0FE}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:GSM Project"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

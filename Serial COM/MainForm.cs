@@ -39,6 +39,7 @@ namespace Serial_COM
 
         bool _isConnected = false;
         bool _sendOnKeyPress = false;
+        bool _selectAllOnTx = false;
         bool _appendCrOnTx = false;
         bool _appendNlOnTx = false;
         bool _appendNlOnRx = false;
@@ -51,7 +52,7 @@ namespace Serial_COM
         EncodeType _txEncode = EncodeType.Ascii;
         EncodeType _rxDecode = EncodeType.Ascii;
 
-        int _lastSendIndex = 0;
+        int _sendHistoryCount = 0;
         readonly List<string> _sendHistory = new List<string>();
 
         string[] _portNames = new string[0];
@@ -74,7 +75,29 @@ namespace Serial_COM
             Invoke(new MethodInvoker(() =>
             {
                 richTextBoxExEventLog.AppendText(str, clr);
+                if (!richTextBoxExEventLog.Focused)
+                    richTextBoxExEventLog.ScrollToCaret();
             }));
+        }
+
+        private void AppenToSendHistory(string txstr)
+        {
+            var idx = _sendHistory.IndexOf(txstr);
+            if (idx >= 0) //already exist in history
+                _sendHistory.RemoveAt(idx);
+            _sendHistory.Add(txstr);
+
+            _sendHistoryCount = _sendHistory.Count;
+            listViewTxHistory.Items.Clear();
+            if (_sendHistoryCount <= 0) return;
+
+            for (int i = 1; i <= _sendHistoryCount; i++)
+            {
+                string[] row = { i.ToString(), _sendHistory[i - 1] };
+                var lvitem = new ListViewItem(row);
+                listViewTxHistory.Items.Add(lvitem);
+            }
+            listViewTxHistory.Items[_sendHistoryCount - 1].EnsureVisible();
         }
 
         private void MonitorDeviceChanges()
@@ -226,6 +249,7 @@ namespace Serial_COM
         {
             InitializeComponent();
             richTextBoxTxData.ForeColor = Color.DarkGreen;
+            listViewTxHistory.ForeColor = Color.DarkGreen;
             richTextBoxTxData.Font = new Font("Consolas", 9);
             richTextBoxExEventLog.Font = new Font("Consolas", 9);
         }
@@ -385,6 +409,10 @@ namespace Serial_COM
                 richTextBoxTxData.Clear();
                 richTextBoxTxData.Focus();
             }
+        }
+        private void SelectAllOnSendToolStripMenuItemTx_Click(object sender, EventArgs e)
+        {
+            _selectAllOnTx = selectAllOnSendToolStripMenuItemTx.Checked;
         }
 
         #endregion
@@ -666,6 +694,25 @@ namespace Serial_COM
 
         #endregion
 
+        #region Send History
+
+        private void ListViewTxHistory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listViewTxHistory.SelectedIndices.Count <= 0) return;
+                var idx = listViewTxHistory.SelectedIndices[0];
+                if (idx < _sendHistory.Count)
+                    richTextBoxTxData.Text = _sendHistory[idx];
+            }
+            catch (Exception ex)
+            {
+                PopupException(ex.Message);
+            }
+        }
+
+        #endregion
+
         #region Sending Data
 
         private void RichTextBoxTxData_KeyDown(object sender, KeyEventArgs e)
@@ -679,14 +726,20 @@ namespace Serial_COM
 
                 if (e.KeyCode == Keys.Up)
                 {
-                    if (_lastSendIndex > 0) _lastSendIndex--;
-                    richTextBoxTxData.Text = _sendHistory[_lastSendIndex];
+                    if (_sendHistory.Count > 0)
+                    {
+                        if (_sendHistoryCount > 1) _sendHistoryCount--;
+                        richTextBoxTxData.Text = _sendHistory[_sendHistoryCount - 1];
+                    }
                     e.Handled = true;
                 }
                 else if (e.KeyCode == Keys.Down)
                 {
-                    if (_lastSendIndex < _sendHistory.Count - 1) _lastSendIndex++;
-                    richTextBoxTxData.Text = _sendHistory[_lastSendIndex];
+                    if (_sendHistory.Count > 0)
+                    {
+                        if (_sendHistoryCount < _sendHistory.Count) _sendHistoryCount++;
+                        richTextBoxTxData.Text = _sendHistory[_sendHistoryCount - 1];
+                    }
                     e.Handled = true;
                 }
             }
@@ -729,6 +782,11 @@ namespace Serial_COM
             }
         }
 
+        private void ListViewTxHistory_DoubleClick(object sender, EventArgs e)
+        {
+            buttonSend.PerformClick();
+        }
+
         private void ButtonSend_Click(object sender, EventArgs e)
         {
             try
@@ -742,11 +800,7 @@ namespace Serial_COM
                 txstr = txstr.Replace("\r\n", "\n");
                 txstr = txstr.Replace('\n', '\r');
 
-                _lastSendIndex = _sendHistory.Count;
-                var idx = _sendHistory.IndexOf(txstr);
-                if (idx >= 0) //already exist in history
-                    _sendHistory.RemoveAt(idx);
-                _sendHistory.Add(txstr);
+                AppenToSendHistory(txstr);
 
                 if (_appendTsOnTx)
                 {
@@ -796,6 +850,7 @@ namespace Serial_COM
                 }
 
                 richTextBoxTxData.Focus();
+                if (_selectAllOnTx) richTextBoxTxData.SelectAll();
             }
             catch (Exception ex)
             {

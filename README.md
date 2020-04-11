@@ -1,4 +1,4 @@
 # Serial COM
 A Serial communication utility tool for windows
 
-![Serial-COM](https://user-images.githubusercontent.com/51051655/72614355-4b38a780-395c-11ea-8ad9-e4593f7710bc.png)
+![Serial COM v1 0 2](https://user-images.githubusercontent.com/51051655/79053403-ec36b600-7c5e-11ea-85a5-680f434ff571.png)

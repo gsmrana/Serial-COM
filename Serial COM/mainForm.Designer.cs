@@ -237,7 +237,7 @@
             this.encodeHEXToolStripMenuItemTx.Name = "encodeHEXToolStripMenuItemTx";
             this.encodeHEXToolStripMenuItemTx.Size = new System.Drawing.Size(178, 22);
             this.encodeHEXToolStripMenuItemTx.Text = "Encode HEX";
-            this.encodeHEXToolStripMenuItemTx.Click += new System.EventHandler(this.ToolStripMenuItemTxEncodeHEX_Click);
+            this.encodeHEXToolStripMenuItemTx.Click += new System.EventHandler(this.ToolStripMenuItemTxEncodeHex_Click);
             // 
             // toolStripSeparator6
             // 

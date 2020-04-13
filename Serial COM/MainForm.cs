@@ -17,49 +17,104 @@ namespace Serial_COM
     {
         #region enum ans const
 
-        public const string SERIAL_ENTITY_CLASS_GUID = "{4d36e978-e325-11ce-bfc1-08002be10318}";
-        public static readonly string[] StddBaudRate = { "9600", "14400", "19200", "38400", "57600", "115200" };
-
-        public enum EncodeType { Auto, Ascii, Hex }
-
-        public class WmiSerialPortInfo
-        {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public string Manufacturer { get; set; }
-            public string Details
-            {
-                get => string.Format("{0} - {1} | {2}", Name, Description, Manufacturer);
-            }
-        }
+        const string SERIAL_ENTITY_CLASS_GUID = "{4d36e978-e325-11ce-bfc1-08002be10318}";
+        readonly string[] StddBaudRate = { "9600", "14400", "19200", "38400", "57600", "115200" };
 
         #endregion
 
         #region Data
 
-        bool _isConnected = false;
-        bool _sendOnKeyPress = false;
-        bool _selectAllOnTx = false;
-        bool _appendCrOnTx = false;
-        bool _appendNlOnTx = false;
-        bool _appendNlOnRx = false;
-        bool _appendTsOnTx = true;
-        bool _appendTsOnRx = false;
-        bool _setDtrOnConnect = false;
-        bool _showWmiPortNames = false;
+        string ConfigFilename = "Serial COM Config.xml";
 
-        SerialCom _serialCom = new SerialCom("COM1", 9600);
-        EncodeType _txEncode = EncodeType.Ascii;
-        EncodeType _rxDecode = EncodeType.Ascii;
-
-        int _sendHistoryCount = 0;
-        readonly List<string> _sendHistory = new List<string>();
+        AppConfig _appConfig;
+        SerialCom _serialCom;
+        bool _isConnected;
 
         string[] _portNames = new string[0];
         string[] _portViewNames = new string[0];
 
-        static ManagementEventWatcher _deviceArrivalWatcher;
-        static ManagementEventWatcher _deviceRemovalWatcher;
+        ManagementEventWatcher _deviceArrivalWatcher;
+        ManagementEventWatcher _deviceRemovalWatcher;
+
+        #endregion
+
+        #region App Config
+
+        private void LoadAppConfig()
+        {
+            try
+            {
+                if (File.Exists(ConfigFilename))
+                    _appConfig = AppConfig.Load(ConfigFilename);
+            }
+            catch (Exception ex)
+            {
+                PopupException(ex.Message);
+            }
+
+            if (_appConfig == null)
+            {
+                _appConfig = new AppConfig();
+                return;
+            }
+
+            if (_appConfig.TxEncode == EncodeType.Auto)
+                ToolStripMenuItemTxEncodeAuto_Click(this, null);
+            else if (_appConfig.TxEncode == EncodeType.Ascii)
+                ToolStripMenuItemTxEncodeAscii_Click(this, null);
+            else if (_appConfig.TxEncode == EncodeType.Hex)
+                ToolStripMenuItemTxEncodeHex_Click(this, null);
+
+            if (_appConfig.RxDecode == EncodeType.Auto)
+                ToolStripMenuItemRxDecodeAuto_Click(this, null);
+            else if (_appConfig.RxDecode == EncodeType.Ascii)
+                ToolStripMenuItemRxDecodeAscii_Click(this, null);
+            else if (_appConfig.RxDecode == EncodeType.Hex)
+                ToolStripMenuItemRxDecodeHex_Click(this, null);
+
+            toolStripMenuItemTxAppendCR.Checked = _appConfig.AppendCrOnTx;
+            toolStripMenuItemTxAppendNL.Checked = _appConfig.AppendNlOnTx;
+            toolStripMenuItemTxAppendTs.Checked = _appConfig.AppendTsOnTx;
+            sendOnKeyPressToolStripMenuItemTx.Checked = _appConfig.SendOnKeyPress;
+            selectAllOnSendToolStripMenuItemTx.Checked = _appConfig.SelectAllOnTx;
+
+            richTextBoxExEventLog.Autoscroll = toolStripMenuItemAutoScroll.Checked = _appConfig.RxAutoScroll;
+            richTextBoxExEventLog.WordWrap = toolStripMenuItemWordWrap.Checked = _appConfig.RxWordWrap;
+            toolStripMenuItemRxAppendNL.Checked = _appConfig.AppendNlOnRx;
+            toolStripMenuItemRxAppendTS.Checked = _appConfig.AppendTsOnRx;
+
+            this.TopMost = toolStripMenuItemAwaysOnTop.Checked = _appConfig.AlwaysOnTop;
+            toolStripMenuItemSetDtrOnConnect.Checked = _appConfig.SetDtrOnConnect;
+            toolStripMenuItemWmiPortNames.Checked = _appConfig.ShowWmiPortNames;
+
+            if (comboBoxPortName.Items.Contains(_appConfig.PortName))
+                comboBoxPortName.SelectedIndex = comboBoxPortName.Items.IndexOf(_appConfig.PortName);
+            if (comboBoxBaudRate.Items.Contains(_appConfig.BaudRate))
+                comboBoxBaudRate.SelectedIndex = comboBoxBaudRate.Items.IndexOf(_appConfig.BaudRate);
+
+            this.Size = _appConfig.WindowSize;
+            var winlocation = _appConfig.WindowLocation;
+            if (winlocation.X >= Screen.AllScreens.Sum(p => p.Bounds.Width))
+            {
+                winlocation.X = (Screen.PrimaryScreen.Bounds.Width - this.Width) / 2;
+                winlocation.Y = (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2;
+            }
+            this.Location = winlocation;
+
+            UpdateSendHistotyListView();
+        }
+
+        private void SaveAppConfig()
+        {
+            var portName = comboBoxPortName.Text;
+            if (comboBoxPortName.SelectedIndex >= 0)
+                portName = _portNames[comboBoxPortName.SelectedIndex];
+            _appConfig.PortName = portName;
+            _appConfig.BaudRate = comboBoxBaudRate.Text;
+            _appConfig.WindowSize = this.Size;
+            _appConfig.WindowLocation = this.Location;
+            AppConfig.Save(ConfigFilename, _appConfig);
+        }
 
         #endregion
 
@@ -82,25 +137,25 @@ namespace Serial_COM
 
         private void AppenToSendHistory(string txstr)
         {
-            var idx = _sendHistory.IndexOf(txstr);
+            var idx = _appConfig.SendHistory.IndexOf(txstr);
             if (idx >= 0) //already exist in history
-                _sendHistory.RemoveAt(idx);
-            _sendHistory.Add(txstr);
+                _appConfig.SendHistory.RemoveAt(idx);
+            _appConfig.SendHistory.Add(txstr);
             UpdateSendHistotyListView();
         }
 
         private void UpdateSendHistotyListView()
         {
-            _sendHistoryCount = _sendHistory.Count;
+            _appConfig.SendHistoryCount = _appConfig.SendHistory.Count;
             listViewTxHistory.Items.Clear();
-            if (_sendHistoryCount <= 0) return;
-            for (int i = 1; i <= _sendHistoryCount; i++)
+            if (_appConfig.SendHistoryCount <= 0) return;
+            for (int i = 1; i <= _appConfig.SendHistoryCount; i++)
             {
-                string[] row = { i.ToString(), _sendHistory[i - 1] };
+                string[] row = { i.ToString(), _appConfig.SendHistory[i - 1] };
                 var lvitem = new ListViewItem(row);
                 listViewTxHistory.Items.Add(lvitem);
             }
-            listViewTxHistory.Items[_sendHistoryCount - 1].EnsureVisible();
+            listViewTxHistory.Items[_appConfig.SendHistoryCount - 1].EnsureVisible();
         }
 
         private void MonitorDeviceChanges()
@@ -120,7 +175,8 @@ namespace Serial_COM
         {
             try
             {
-                if (!_isConnected) UpdateSerialPortNames();
+                if (!_isConnected)
+                    UpdateSerialPortNames();
             }
             catch (Exception ex)
             {
@@ -157,7 +213,7 @@ namespace Serial_COM
             var portNames = new string[0];
             var portViewNames = new string[0];
 
-            if (_showWmiPortNames)
+            if (_appConfig.ShowWmiPortNames)
             {
                 var wmiPortNames = GetWmiSerialPortInfo();
                 portNames = wmiPortNames.Select(p => p.Name).ToArray();
@@ -195,16 +251,6 @@ namespace Serial_COM
             var portInfo = GetWmiSerialPortInfo().FirstOrDefault(p => p.Name == portName);
             if (portInfo != null) toolStripPortDetails.Text = portInfo.Details;
             else toolStripPortDetails.Text = portName;
-        }
-
-        public static string EncodeNumConfig(int[] param)
-        {
-            return string.Join(",", param);
-        }
-
-        public static int DecodeNumConfig(string config, int index)
-        {
-            return int.Parse(config.Split(',')[index]);
         }
 
         public static string ByteArrayToFormatedString(byte[] bytes)
@@ -261,24 +307,10 @@ namespace Serial_COM
         {
             try
             {
+                ConfigFilename = Path.Combine(Application.UserAppDataPath, ConfigFilename);
+                LoadAppConfig();
                 UpdateSerialPortNames();
                 comboBoxBaudRate.ComboBox.DataSource = StddBaudRate;
-
-                Config.Load();
-                if (comboBoxPortName.Items.Contains(Config.PortName))
-                    comboBoxPortName.SelectedIndex = comboBoxPortName.Items.IndexOf(Config.PortName);
-                if (comboBoxBaudRate.Items.Contains(Config.BaudRate))
-                    comboBoxBaudRate.SelectedIndex = comboBoxBaudRate.Items.IndexOf(Config.BaudRate);
-                this.Size = new Size(DecodeNumConfig(Config.WindowSize, 0), DecodeNumConfig(Config.WindowSize, 1));
-                var winlocation = new Point(DecodeNumConfig(Config.WindowLocation, 0), DecodeNumConfig(Config.WindowLocation, 1));
-
-                // check location within screen bounds
-                if (winlocation.X >= Screen.AllScreens.Sum(p => p.Bounds.Width))
-                {
-                    winlocation.X = (Screen.PrimaryScreen.Bounds.Width - this.Width) / 2;
-                    winlocation.Y = (Screen.PrimaryScreen.Bounds.Height - this.Height) / 2;
-                }
-                this.Location = winlocation;
             }
             catch (Exception ex)
             {
@@ -305,15 +337,9 @@ namespace Serial_COM
         {
             try
             {
-                var portName = comboBoxPortName.Text;
-                if (comboBoxPortName.SelectedIndex >= 0)
-                    portName = _portNames[comboBoxPortName.SelectedIndex];
-                Config.PortName = portName;
-                Config.BaudRate = comboBoxBaudRate.Text;
-                Config.WindowSize = EncodeNumConfig(new[] { this.Size.Width, this.Size.Height });
-                Config.WindowLocation = EncodeNumConfig(new[] { this.Location.X, this.Location.Y });
-                Config.Save();
-                _serialCom.Dispose();
+                SaveAppConfig();
+                if (_serialCom != null)
+                    _serialCom.Dispose();
             }
             catch (Exception ex)
             {
@@ -367,7 +393,7 @@ namespace Serial_COM
 
         private void ToolStripMenuItemTxEncodeAuto_Click(object sender, EventArgs e)
         {
-            _txEncode = EncodeType.Auto;
+            _appConfig.TxEncode = EncodeType.Auto;
             encodeASCIIToolStripMenuItemTx.Checked = false;
             encodeHEXToolStripMenuItemTx.Checked = false;
             encodeAutoToolStripMenuItemTx.Checked = true;
@@ -375,15 +401,15 @@ namespace Serial_COM
 
         private void ToolStripMenuItemTxEncodeAscii_Click(object sender, EventArgs e)
         {
-            _txEncode = EncodeType.Ascii;
+            _appConfig.TxEncode = EncodeType.Ascii;
             encodeAutoToolStripMenuItemTx.Checked = false;
             encodeHEXToolStripMenuItemTx.Checked = false;
             encodeASCIIToolStripMenuItemTx.Checked = true;
         }
 
-        private void ToolStripMenuItemTxEncodeHEX_Click(object sender, EventArgs e)
+        private void ToolStripMenuItemTxEncodeHex_Click(object sender, EventArgs e)
         {
-            _txEncode = EncodeType.Hex;
+            _appConfig.TxEncode = EncodeType.Hex;
             encodeAutoToolStripMenuItemTx.Checked = false;
             encodeASCIIToolStripMenuItemTx.Checked = false;
             encodeHEXToolStripMenuItemTx.Checked = true;
@@ -391,23 +417,23 @@ namespace Serial_COM
 
         private void ToolStripMenuItemTxAppendCR_CheckedChanged(object sender, EventArgs e)
         {
-            _appendCrOnTx = toolStripMenuItemTxAppendCR.Checked;
+            _appConfig.AppendCrOnTx = toolStripMenuItemTxAppendCR.Checked;
         }
 
         private void ToolStripMenuItemTxAppendNL_CheckedChanged(object sender, EventArgs e)
         {
-            _appendNlOnTx = toolStripMenuItemTxAppendNL.Checked;
+            _appConfig.AppendNlOnTx = toolStripMenuItemTxAppendNL.Checked;
         }
 
         private void ToolStripMenuItemTxAppendTs_CheckedChanged(object sender, EventArgs e)
         {
-            _appendTsOnTx = toolStripMenuItemTxAppendTs.Checked;
+            _appConfig.AppendTsOnTx = toolStripMenuItemTxAppendTs.Checked;
         }
 
         private void ToolStripMenuItemTxSendOnKeyPress_Click(object sender, EventArgs e)
         {
-            _sendOnKeyPress = sendOnKeyPressToolStripMenuItemTx.Checked;
-            if (_sendOnKeyPress)
+            _appConfig.SendOnKeyPress = sendOnKeyPressToolStripMenuItemTx.Checked;
+            if (_appConfig.SendOnKeyPress)
             {
                 richTextBoxTxData.Clear();
                 richTextBoxTxData.Focus();
@@ -415,7 +441,7 @@ namespace Serial_COM
         }
         private void SelectAllOnSendToolStripMenuItemTx_Click(object sender, EventArgs e)
         {
-            _selectAllOnTx = selectAllOnSendToolStripMenuItemTx.Checked;
+            _appConfig.SelectAllOnTx = selectAllOnSendToolStripMenuItemTx.Checked;
         }
 
         #endregion
@@ -424,7 +450,7 @@ namespace Serial_COM
 
         private void ToolStripMenuItemRxDecodeAuto_Click(object sender, EventArgs e)
         {
-            _rxDecode = EncodeType.Auto;
+            _appConfig.RxDecode = EncodeType.Auto;
             decodeASCIIToolStripMenuItemRx.Checked = false;
             decodeHEXToolStripMenuItemRx.Checked = false;
             decodeAutoToolStripMenuItemRx.Checked = true;
@@ -432,7 +458,7 @@ namespace Serial_COM
 
         private void ToolStripMenuItemRxDecodeAscii_Click(object sender, EventArgs e)
         {
-            _rxDecode = EncodeType.Ascii;
+            _appConfig.RxDecode = EncodeType.Ascii;
             decodeAutoToolStripMenuItemRx.Checked = false;
             decodeHEXToolStripMenuItemRx.Checked = false;
             decodeASCIIToolStripMenuItemRx.Checked = true;
@@ -440,34 +466,35 @@ namespace Serial_COM
 
         private void ToolStripMenuItemRxDecodeHex_Click(object sender, EventArgs e)
         {
-            _rxDecode = EncodeType.Hex;
+            _appConfig.RxDecode = EncodeType.Hex;
             decodeAutoToolStripMenuItemRx.Checked = false;
             decodeASCIIToolStripMenuItemRx.Checked = false;
             decodeHEXToolStripMenuItemRx.Checked = true;
         }
-        private void ToolStripMenuItemWordWrap_CheckedChanged(object sender, EventArgs e)
-        {
-            richTextBoxExEventLog.WordWrap = toolStripMenuItemWordWrap.Checked;
-        }
 
         private void ToolStripMenuItemAutoScroll_CheckedChanged(object sender, EventArgs e)
         {
-            richTextBoxExEventLog.Autoscroll = toolStripMenuItemAutoScroll.Checked;
+            richTextBoxExEventLog.Autoscroll = _appConfig.RxAutoScroll = toolStripMenuItemAutoScroll.Checked;
+        }
+
+        private void ToolStripMenuItemWordWrap_CheckedChanged(object sender, EventArgs e)
+        {
+            richTextBoxExEventLog.WordWrap = _appConfig.RxWordWrap = toolStripMenuItemWordWrap.Checked;
         }
 
         private void ToolStripMenuItemRxAppendNL_CheckedChanged(object sender, EventArgs e)
         {
-            _appendNlOnRx = toolStripMenuItemRxAppendNL.Checked;
+            _appConfig.AppendNlOnRx = toolStripMenuItemRxAppendNL.Checked;
         }
 
         private void ToolStripMenuItemRxAppendTS_CheckedChanged(object sender, EventArgs e)
         {
-            _appendTsOnRx = toolStripMenuItemRxAppendTS.Checked;
+            _appConfig.AppendTsOnRx = toolStripMenuItemRxAppendTS.Checked;
         }
 
         private void ToolStripMenuItemRxAppendNL_Click(object sender, EventArgs e)
         {
-            _appendNlOnRx = toolStripMenuItemRxAppendNL.Checked;
+            _appConfig.AppendNlOnRx = toolStripMenuItemRxAppendNL.Checked;
         }
 
         #endregion
@@ -476,20 +503,20 @@ namespace Serial_COM
 
         private void ToolStripMenuItemAwaysOnTop_CheckedChanged(object sender, EventArgs e)
         {
-            this.TopMost = toolStripMenuItemAwaysOnTop.Checked;
+            this.TopMost = _appConfig.AlwaysOnTop = toolStripMenuItemAwaysOnTop.Checked;
         }
 
         private void ToolStripMenuItemToolsResetOnConnect_CheckedChanged(object sender, EventArgs e)
         {
-            _setDtrOnConnect = toolStripMenuItemSetDtrOnConnect.Checked;
+            _appConfig.SetDtrOnConnect = toolStripMenuItemSetDtrOnConnect.Checked;
         }
 
         private void ToolStripMenuItemWmiPortNames_CheckedChanged(object sender, EventArgs e)
         {
-            _showWmiPortNames = toolStripMenuItemWmiPortNames.Checked;
+            _appConfig.ShowWmiPortNames = toolStripMenuItemWmiPortNames.Checked;
             try
             {
-                if (_showWmiPortNames) comboBoxPortName.Width = 350;
+                if (_appConfig.ShowWmiPortNames) comboBoxPortName.Width = 350;
                 else comboBoxPortName.Width = 100;
                 UpdateSerialPortNames();
             }
@@ -550,7 +577,7 @@ namespace Serial_COM
                         portName = _portNames[comboBoxPortName.SelectedIndex];
                     var baudRate = int.Parse(comboBoxBaudRate.Text);
 
-                    _serialCom = new SerialCom(portName, baudRate, _setDtrOnConnect);
+                    _serialCom = new SerialCom(portName, baudRate, _appConfig.SetDtrOnConnect);
                     _serialCom.OnDataReceived += SerialCom_OnDataReceived;
                     _serialCom.OnException += SerialCom_OnException;
                     _serialCom.Open();
@@ -705,8 +732,8 @@ namespace Serial_COM
             {
                 if (listViewTxHistory.SelectedIndices.Count <= 0) return;
                 var idx = listViewTxHistory.SelectedIndices[0];
-                if (idx < _sendHistory.Count)
-                    richTextBoxTxData.Text = _sendHistory[idx];
+                if (idx < _appConfig.SendHistory.Count)
+                    richTextBoxTxData.Text = _appConfig.SendHistory[idx];
             }
             catch (Exception ex)
             {
@@ -726,9 +753,9 @@ namespace Serial_COM
             {
                 if (listViewTxHistory.SelectedIndices.Count <= 0) return;
                 var idx = listViewTxHistory.SelectedIndices[0];
-                if (idx >= 0 && idx < _sendHistory.Count)
+                if (idx >= 0 && idx < _appConfig.SendHistory.Count)
                 {
-                    _sendHistory.RemoveAt(idx);
+                    _appConfig.SendHistory.RemoveAt(idx);
                     UpdateSendHistotyListView();
                 }
             }
@@ -742,7 +769,7 @@ namespace Serial_COM
         {
             try
             {
-                _sendHistory.Clear();
+                _appConfig.SendHistory.Clear();
                 UpdateSendHistotyListView();
             }
             catch (Exception ex)
@@ -766,19 +793,19 @@ namespace Serial_COM
 
                 if (e.KeyCode == Keys.Up)
                 {
-                    if (_sendHistory.Count > 0)
+                    if (_appConfig.SendHistory.Count > 0)
                     {
-                        if (_sendHistoryCount > 1) _sendHistoryCount--;
-                        richTextBoxTxData.Text = _sendHistory[_sendHistoryCount - 1];
+                        if (_appConfig.SendHistoryCount > 1) _appConfig.SendHistoryCount--;
+                        richTextBoxTxData.Text = _appConfig.SendHistory[_appConfig.SendHistoryCount - 1];
                     }
                     e.Handled = true;
                 }
                 else if (e.KeyCode == Keys.Down)
                 {
-                    if (_sendHistory.Count > 0)
+                    if (_appConfig.SendHistory.Count > 0)
                     {
-                        if (_sendHistoryCount < _sendHistory.Count) _sendHistoryCount++;
-                        richTextBoxTxData.Text = _sendHistory[_sendHistoryCount - 1];
+                        if (_appConfig.SendHistoryCount < _appConfig.SendHistory.Count) _appConfig.SendHistoryCount++;
+                        richTextBoxTxData.Text = _appConfig.SendHistory[_appConfig.SendHistoryCount - 1];
                     }
                     e.Handled = true;
                 }
@@ -800,7 +827,7 @@ namespace Serial_COM
 
             try
             {
-                if (_sendOnKeyPress)
+                if (_appConfig.SendOnKeyPress)
                 {
                     var keyval = (byte)e.KeyChar;
                     _serialCom.Write(new byte[] { keyval });
@@ -842,7 +869,7 @@ namespace Serial_COM
 
                 AppenToSendHistory(txstr);
 
-                if (_appendTsOnTx)
+                if (_appConfig.AppendTsOnTx)
                 {
                     var txts = string.Format("\r[{0:HH:mm:ss.fff}] --> ", DateTime.Now);
                     AppendEventLog(txts, Color.DarkOliveGreen, false);
@@ -853,44 +880,44 @@ namespace Serial_COM
                 }
 
                 var txbytes = new List<byte>();
-                if (_txEncode == EncodeType.Auto)
+                if (_appConfig.TxEncode == EncodeType.Auto)
                 {
                     if (txstr.StartsWith("0x"))
                     {
                         txstr = txstr.Substring(2);
                         txbytes.AddRange(HexStringToByteArray(txstr));
-                        if (_appendCrOnTx) txbytes.Add((byte)'\r');
-                        if (_appendNlOnTx) txbytes.Add((byte)'\n');
+                        if (_appConfig.AppendCrOnTx) txbytes.Add((byte)'\r');
+                        if (_appConfig.AppendNlOnTx) txbytes.Add((byte)'\n');
                         _serialCom.Write(txbytes.ToArray());
                     }
                     else
                     {
-                        if (_appendCrOnTx) txstr += "\r";
-                        if (_appendNlOnTx) txstr += "\n";
+                        if (_appConfig.AppendCrOnTx) txstr += "\r";
+                        if (_appConfig.AppendNlOnTx) txstr += "\n";
                         _serialCom.Write(txstr);
                         txbytes.AddRange(Encoding.ASCII.GetBytes(txstr));
                     }
                     AppendEventLog(ByteArrayToFormatedString(txbytes.ToArray()), Color.DarkGreen, false);
                 }
-                else if (_txEncode == EncodeType.Hex)
+                else if (_appConfig.TxEncode == EncodeType.Hex)
                 {
                     if (txstr.StartsWith("0x")) txstr = txstr.Substring(2);
                     txbytes.AddRange(HexStringToByteArray(txstr));
-                    if (_appendCrOnTx) txbytes.Add((byte)'\r');
-                    if (_appendNlOnTx) txbytes.Add((byte)'\n');
+                    if (_appConfig.AppendCrOnTx) txbytes.Add((byte)'\r');
+                    if (_appConfig.AppendNlOnTx) txbytes.Add((byte)'\n');
                     _serialCom.Write(txbytes.ToArray());
                     AppendEventLog(ByteArrayToHexString(txbytes.ToArray()), Color.DarkGreen, false);
                 }
                 else //ascii
                 {
-                    if (_appendCrOnTx) txstr += "\r";
-                    if (_appendNlOnTx) txstr += "\n";
+                    if (_appConfig.AppendCrOnTx) txstr += "\r";
+                    if (_appConfig.AppendNlOnTx) txstr += "\n";
                     _serialCom.Write(txstr);
                     AppendEventLog(txstr, Color.DarkGreen, false);
                 }
 
                 richTextBoxTxData.Focus();
-                if (_selectAllOnTx) richTextBoxTxData.SelectAll();
+                if (_appConfig.SelectAllOnTx) richTextBoxTxData.SelectAll();
             }
             catch (Exception ex)
             {
@@ -910,23 +937,23 @@ namespace Serial_COM
             try
             {
                 var now = DateTime.Now;
-                if (_appendTsOnRx && (now.Subtract(_lastRxTsTime) > _appendTsOnRxInterval))
+                if (_appConfig.AppendTsOnRx && (now.Subtract(_lastRxTsTime) > _appendTsOnRxInterval))
                 {
                     _lastRxTsTime = now;
                     var rxts = string.Format("\r[{0:HH:mm:ss.fff}] <-- ", _lastRxTsTime);
                     AppendEventLog(rxts, Color.MidnightBlue, false);
                 }
-                else if (_appendNlOnRx)
+                else if (_appConfig.AppendNlOnRx)
                 {
                     AppendEventLog("\r", Color.MidnightBlue, false);  //for richtextbox newline
                 }
 
                 var rxstr = "";
-                if (_rxDecode == EncodeType.Auto)
+                if (_appConfig.RxDecode == EncodeType.Auto)
                 {
                     rxstr = ByteArrayToFormatedString(e.Data);
                 }
-                else if (_rxDecode == EncodeType.Hex)
+                else if (_appConfig.RxDecode == EncodeType.Hex)
                 {
                     rxstr = ByteArrayToHexString(e.Data);
                 }
@@ -950,4 +977,16 @@ namespace Serial_COM
         #endregion
 
     }
+
+    public class WmiSerialPortInfo
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Manufacturer { get; set; }
+        public string Details
+        {
+            get => string.Format("{0} - {1} | {2}", Name, Description, Manufacturer);
+        }
+    }
+
 }

@@ -86,11 +86,14 @@ namespace Serial_COM
             if (idx >= 0) //already exist in history
                 _sendHistory.RemoveAt(idx);
             _sendHistory.Add(txstr);
+            UpdateSendHistotyListView();
+        }
 
+        private void UpdateSendHistotyListView()
+        {
             _sendHistoryCount = _sendHistory.Count;
             listViewTxHistory.Items.Clear();
             if (_sendHistoryCount <= 0) return;
-
             for (int i = 1; i <= _sendHistoryCount; i++)
             {
                 string[] row = { i.ToString(), _sendHistory[i - 1] };
@@ -694,7 +697,7 @@ namespace Serial_COM
 
         #endregion
 
-        #region Send History
+        #region Send History Context Menu
 
         private void ListViewTxHistory_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -704,6 +707,43 @@ namespace Serial_COM
                 var idx = listViewTxHistory.SelectedIndices[0];
                 if (idx < _sendHistory.Count)
                     richTextBoxTxData.Text = _sendHistory[idx];
+            }
+            catch (Exception ex)
+            {
+                PopupException(ex.Message);
+            }
+        }
+
+        private void ContextMenuStripTxHistory_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            removeToolStripMenuItem.Enabled = listViewTxHistory.SelectedIndices.Count > 0;
+            removeAllToolStripMenuItem.Enabled = listViewTxHistory.Items.Count > 0;
+        }
+
+        private void RemoveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listViewTxHistory.SelectedIndices.Count <= 0) return;
+                var idx = listViewTxHistory.SelectedIndices[0];
+                if (idx >= 0 && idx < _sendHistory.Count)
+                {
+                    _sendHistory.RemoveAt(idx);
+                    UpdateSendHistotyListView();
+                }
+            }
+            catch (Exception ex)
+            {
+                PopupException(ex.Message);
+            }
+        }
+
+        private void RemoveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _sendHistory.Clear();
+                UpdateSendHistotyListView();
             }
             catch (Exception ex)
             {
@@ -751,7 +791,7 @@ namespace Serial_COM
 
         private void RichTextBoxTxData_KeyUp(object sender, KeyEventArgs e)
         {
-
+            // nothing to do here for now
         }
 
         private void RichTextBoxTxData_KeyPress(object sender, KeyPressEventArgs e)

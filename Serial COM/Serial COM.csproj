@@ -78,6 +78,7 @@
     <Compile Include="TableViwForm.designer.cs">
       <DependentUpon>TableViwForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppUpdater.cs" />
     <EmbeddedResource Include="AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </EmbeddedResource>

@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Drawing;
 using System.Management;
-using System.Net;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -589,72 +588,33 @@ namespace Serial_COM
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var aboutbox = new AboutBox();
-            aboutbox.ShowDialog();
+            try
+            {
+                var aboutbox = new AboutBox();
+                aboutbox.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                PopupException(ex.Message);
+            }
         }
-
-        string _installerFilename = "";
 
         private void UpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
-                UpdateStatusLabel("Checking for update...");
-                var github = new Octokit.GitHubClient(new Octokit.ProductHeaderValue("Serial-COM"));
-                var release = github.Repository.Release.GetAll("gsmrana", "Serial-COM").Result.FirstOrDefault();
-
-                var verstr = release.TagName;
-                if (verstr.StartsWith("v")) verstr = verstr.Remove(0, 1);
-                if (verstr.Count(c => c == '.') < 3) verstr += ".0";
-                var latestversion = new Version(verstr);
-                if (latestversion > Assembly.GetExecutingAssembly().GetName().Version)
-                {
-                    var message = string.Format("A new version {0} is available!\rDo you want to download and install?", release.TagName);
-                    var result = MessageBox.Show(message, "Update Confirmation", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                    if (result != DialogResult.Yes) return;
-                }
-                else
-                {
-                    MessageBox.Show("You are already using the latest version!", "Update Check",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                _installerFilename = Path.Combine(Path.GetTempPath(), release.Assets.FirstOrDefault().Name);
-                UpdateStatusLabel(string.Format("Downloading... 0%, Total {0} bytes to {1}",
-                    release.Assets.FirstOrDefault().Size, Path.GetFileName(_installerFilename)));
-                using (var client = new WebClient())
-                {
-                    client.DownloadProgressChanged += Client_DownloadProgressChanged;
-                    client.DownloadFileCompleted += Client_DownloadFileCompleted;
-                    client.DownloadFileAsync(new Uri(release.Assets.FirstOrDefault().BrowserDownloadUrl), _installerFilename);
-                }
+                var appUpdater = new AppUpdater("gsmrana", "Serial-COM");
+                appUpdater.OnStatusUpdate += UpdateStatusLabel;
+                appUpdater.OnDownlodCompleted += this.Close;
+                appUpdater.RunUpdateProcess(Assembly.GetExecutingAssembly().GetName().Version);
             }
             catch (Exception ex)
             {
-                PopupException(ex.Message, "Update Exception");
+                var message = ex.Message;
+                if (ex.InnerException != null)
+                    message = ex.InnerException.Message;
+                PopupException(message, "Update Exception");
                 Process.Start("https://github.com/gsmrana/Serial-COM/releases");
-            }
-        }
-
-        private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            UpdateStatusLabel(string.Format("Downloading... {0}%, {1} of {2} bytes",
-                e.ProgressPercentage, e.BytesReceived, e.TotalBytesToReceive));
-        }
-
-        private void Client_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-        {
-            try
-            {
-                if (e.Error != null) throw e.Error;
-                UpdateStatusLabel("Installing: " + Path.GetFileName(_installerFilename));
-                Process.Start(_installerFilename);
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                PopupException(ex.Message, "Download Exception");
             }
         }
 

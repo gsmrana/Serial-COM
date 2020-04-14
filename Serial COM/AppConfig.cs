@@ -11,9 +11,9 @@ namespace Serial_COM
 {
     public enum EncodeType
     {
-        Auto,
         Ascii,
-        Hex
+        Hex,
+        Mixed,
     }
 
     [Serializable]
@@ -22,14 +22,16 @@ namespace Serial_COM
         public EncodeType TxEncode { get; set; } = EncodeType.Ascii;
         public EncodeType RxDecode { get; set; } = EncodeType.Ascii;
 
-        public bool AppendCrOnTx { get; set; }
-        public bool AppendNlOnTx { get; set; }
-        public bool AppendTsOnTx { get; set; } = true;
+        public bool AppendCrWithTxData { get; set; }
+        public bool AppendNlWithTxData { get; set; }
+        public bool AppendTsBeforeTxView { get; set; } = true;
+        public bool AppendNlAfterTxView { get; set; }
         public bool SendOnKeyPress { get; set; }
-        public bool SelectAllOnTx { get; set; }
+        public bool SelectAllAfterTx { get; set; }
 
-        public bool AppendNlOnRx { get; set; }
-        public bool AppendTsOnRx { get; set; }
+        public bool AppendNlBeforeRxView { get; set; }
+        public bool AppendTsBeforeRxView { get; set; }
+        public int AppendTsOnRxIntervalMs { get; set; } = 20;
         public bool RxAutoScroll { get; set; } = true;
         public bool RxWordWrap { get; set; } = true;
         public bool PreserveHistory { get; set; } = true;
@@ -38,8 +40,8 @@ namespace Serial_COM
         public bool SetDtrOnConnect { get; set; }
         public bool ShowWmiPortNames { get; set; }
 
-        public string PortName { get; set; } = "";
-        public string BaudRate { get; set; } = "";
+        public string SerialPortName { get; set; } = "";
+        public string SerialBaudRate { get; set; } = "";
 
         public Size WindowSize { get; set; } = new Size();
         public Point WindowLocation { get; set; } = new Point();

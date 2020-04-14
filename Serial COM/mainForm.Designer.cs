@@ -38,20 +38,22 @@
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.encodeAutoToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
             this.encodeASCIIToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
             this.encodeHEXToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
+            this.encodeMixedToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemTxAppendCR = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTxAppendNL = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.appendNewlineToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTxAppendTs = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.sendOnKeyPressToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAllOnSendToolStripMenuItemTx = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.decodeAutoToolStripMenuItemRx = new System.Windows.Forms.ToolStripMenuItem();
             this.decodeASCIIToolStripMenuItemRx = new System.Windows.Forms.ToolStripMenuItem();
             this.decodeHEXToolStripMenuItemRx = new System.Windows.Forms.ToolStripMenuItem();
+            this.decodeMixedToolStripMenuItemRx = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemRxAppendNL = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemRxAppendTS = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,11 +68,8 @@
             this.toolStripMenuItemWmiPortNames = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItemOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.indexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripPortDetails = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -141,7 +140,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 761);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(834, 749);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // menuStrip1
@@ -206,12 +205,14 @@
             this.toolStripMenuItem1.Checked = true;
             this.toolStripMenuItem1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.encodeAutoToolStripMenuItemTx,
             this.encodeASCIIToolStripMenuItemTx,
             this.encodeHEXToolStripMenuItemTx,
+            this.encodeMixedToolStripMenuItemTx,
             this.toolStripSeparator6,
             this.toolStripMenuItemTxAppendCR,
             this.toolStripMenuItemTxAppendNL,
+            this.toolStripSeparator5,
+            this.appendNewlineToolStripMenuItemTx,
             this.toolStripMenuItemTxAppendTs,
             this.toolStripSeparator3,
             this.sendOnKeyPressToolStripMenuItemTx,
@@ -220,39 +221,39 @@
             this.toolStripMenuItem1.Size = new System.Drawing.Size(45, 20);
             this.toolStripMenuItem1.Text = "&Send";
             // 
-            // encodeAutoToolStripMenuItemTx
-            // 
-            this.encodeAutoToolStripMenuItemTx.Name = "encodeAutoToolStripMenuItemTx";
-            this.encodeAutoToolStripMenuItemTx.Size = new System.Drawing.Size(180, 22);
-            this.encodeAutoToolStripMenuItemTx.Text = "Encode Auto";
-            this.encodeAutoToolStripMenuItemTx.Click += new System.EventHandler(this.ToolStripMenuItemTxEncodeAuto_Click);
-            // 
             // encodeASCIIToolStripMenuItemTx
             // 
             this.encodeASCIIToolStripMenuItemTx.Checked = true;
             this.encodeASCIIToolStripMenuItemTx.CheckState = System.Windows.Forms.CheckState.Checked;
             this.encodeASCIIToolStripMenuItemTx.Name = "encodeASCIIToolStripMenuItemTx";
-            this.encodeASCIIToolStripMenuItemTx.Size = new System.Drawing.Size(180, 22);
+            this.encodeASCIIToolStripMenuItemTx.Size = new System.Drawing.Size(178, 22);
             this.encodeASCIIToolStripMenuItemTx.Text = "Encode ASCII";
             this.encodeASCIIToolStripMenuItemTx.Click += new System.EventHandler(this.ToolStripMenuItemTxEncodeAscii_Click);
             // 
             // encodeHEXToolStripMenuItemTx
             // 
             this.encodeHEXToolStripMenuItemTx.Name = "encodeHEXToolStripMenuItemTx";
-            this.encodeHEXToolStripMenuItemTx.Size = new System.Drawing.Size(180, 22);
+            this.encodeHEXToolStripMenuItemTx.Size = new System.Drawing.Size(178, 22);
             this.encodeHEXToolStripMenuItemTx.Text = "Encode HEX";
             this.encodeHEXToolStripMenuItemTx.Click += new System.EventHandler(this.ToolStripMenuItemTxEncodeHex_Click);
+            // 
+            // encodeMixedToolStripMenuItemTx
+            // 
+            this.encodeMixedToolStripMenuItemTx.Name = "encodeMixedToolStripMenuItemTx";
+            this.encodeMixedToolStripMenuItemTx.Size = new System.Drawing.Size(178, 22);
+            this.encodeMixedToolStripMenuItemTx.Text = "Encode Mixed";
+            this.encodeMixedToolStripMenuItemTx.Click += new System.EventHandler(this.ToolStripMenuItemTxEncodeAuto_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(175, 6);
             // 
             // toolStripMenuItemTxAppendCR
             // 
             this.toolStripMenuItemTxAppendCR.CheckOnClick = true;
             this.toolStripMenuItemTxAppendCR.Name = "toolStripMenuItemTxAppendCR";
-            this.toolStripMenuItemTxAppendCR.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemTxAppendCR.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItemTxAppendCR.Text = "Append - \\r";
             this.toolStripMenuItemTxAppendCR.CheckedChanged += new System.EventHandler(this.ToolStripMenuItemTxAppendCR_CheckedChanged);
             // 
@@ -260,9 +261,22 @@
             // 
             this.toolStripMenuItemTxAppendNL.CheckOnClick = true;
             this.toolStripMenuItemTxAppendNL.Name = "toolStripMenuItemTxAppendNL";
-            this.toolStripMenuItemTxAppendNL.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemTxAppendNL.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItemTxAppendNL.Text = "Append - \\n";
             this.toolStripMenuItemTxAppendNL.CheckedChanged += new System.EventHandler(this.ToolStripMenuItemTxAppendNL_CheckedChanged);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(175, 6);
+            // 
+            // appendNewlineToolStripMenuItemTx
+            // 
+            this.appendNewlineToolStripMenuItemTx.CheckOnClick = true;
+            this.appendNewlineToolStripMenuItemTx.Name = "appendNewlineToolStripMenuItemTx";
+            this.appendNewlineToolStripMenuItemTx.Size = new System.Drawing.Size(178, 22);
+            this.appendNewlineToolStripMenuItemTx.Text = "Append Newline";
+            this.appendNewlineToolStripMenuItemTx.CheckedChanged += new System.EventHandler(this.AppendNewlineToolStripMenuItemTx_CheckedChanged);
             // 
             // toolStripMenuItemTxAppendTs
             // 
@@ -270,20 +284,20 @@
             this.toolStripMenuItemTxAppendTs.CheckOnClick = true;
             this.toolStripMenuItemTxAppendTs.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripMenuItemTxAppendTs.Name = "toolStripMenuItemTxAppendTs";
-            this.toolStripMenuItemTxAppendTs.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemTxAppendTs.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItemTxAppendTs.Text = "Append Timestamp";
             this.toolStripMenuItemTxAppendTs.CheckedChanged += new System.EventHandler(this.ToolStripMenuItemTxAppendTs_CheckedChanged);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(175, 6);
             // 
             // sendOnKeyPressToolStripMenuItemTx
             // 
             this.sendOnKeyPressToolStripMenuItemTx.CheckOnClick = true;
             this.sendOnKeyPressToolStripMenuItemTx.Name = "sendOnKeyPressToolStripMenuItemTx";
-            this.sendOnKeyPressToolStripMenuItemTx.Size = new System.Drawing.Size(180, 22);
+            this.sendOnKeyPressToolStripMenuItemTx.Size = new System.Drawing.Size(178, 22);
             this.sendOnKeyPressToolStripMenuItemTx.Text = "Send on Key Press";
             this.sendOnKeyPressToolStripMenuItemTx.CheckedChanged += new System.EventHandler(this.SendOnKeyPressToolStripMenuItemTx_CheckedChanged);
             // 
@@ -291,16 +305,16 @@
             // 
             this.selectAllOnSendToolStripMenuItemTx.CheckOnClick = true;
             this.selectAllOnSendToolStripMenuItemTx.Name = "selectAllOnSendToolStripMenuItemTx";
-            this.selectAllOnSendToolStripMenuItemTx.Size = new System.Drawing.Size(180, 22);
+            this.selectAllOnSendToolStripMenuItemTx.Size = new System.Drawing.Size(178, 22);
             this.selectAllOnSendToolStripMenuItemTx.Text = "Select All On Send";
             this.selectAllOnSendToolStripMenuItemTx.CheckedChanged += new System.EventHandler(this.SelectAllOnSendToolStripMenuItemTx_CheckedChanged);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.decodeAutoToolStripMenuItemRx,
             this.decodeASCIIToolStripMenuItemRx,
             this.decodeHEXToolStripMenuItemRx,
+            this.decodeMixedToolStripMenuItemRx,
             this.toolStripSeparator1,
             this.toolStripMenuItemRxAppendNL,
             this.toolStripMenuItemRxAppendTS,
@@ -313,39 +327,39 @@
             this.toolStripMenuItem2.Size = new System.Drawing.Size(59, 20);
             this.toolStripMenuItem2.Text = "&Receive";
             // 
-            // decodeAutoToolStripMenuItemRx
-            // 
-            this.decodeAutoToolStripMenuItemRx.Name = "decodeAutoToolStripMenuItemRx";
-            this.decodeAutoToolStripMenuItemRx.Size = new System.Drawing.Size(180, 22);
-            this.decodeAutoToolStripMenuItemRx.Text = "Decode Auto";
-            this.decodeAutoToolStripMenuItemRx.Click += new System.EventHandler(this.ToolStripMenuItemRxDecodeAuto_Click);
-            // 
             // decodeASCIIToolStripMenuItemRx
             // 
             this.decodeASCIIToolStripMenuItemRx.Checked = true;
             this.decodeASCIIToolStripMenuItemRx.CheckState = System.Windows.Forms.CheckState.Checked;
             this.decodeASCIIToolStripMenuItemRx.Name = "decodeASCIIToolStripMenuItemRx";
-            this.decodeASCIIToolStripMenuItemRx.Size = new System.Drawing.Size(180, 22);
+            this.decodeASCIIToolStripMenuItemRx.Size = new System.Drawing.Size(178, 22);
             this.decodeASCIIToolStripMenuItemRx.Text = "Decode ASCII";
             this.decodeASCIIToolStripMenuItemRx.Click += new System.EventHandler(this.ToolStripMenuItemRxDecodeAscii_Click);
             // 
             // decodeHEXToolStripMenuItemRx
             // 
             this.decodeHEXToolStripMenuItemRx.Name = "decodeHEXToolStripMenuItemRx";
-            this.decodeHEXToolStripMenuItemRx.Size = new System.Drawing.Size(180, 22);
+            this.decodeHEXToolStripMenuItemRx.Size = new System.Drawing.Size(178, 22);
             this.decodeHEXToolStripMenuItemRx.Text = "Decode HEX";
             this.decodeHEXToolStripMenuItemRx.Click += new System.EventHandler(this.ToolStripMenuItemRxDecodeHex_Click);
+            // 
+            // decodeMixedToolStripMenuItemRx
+            // 
+            this.decodeMixedToolStripMenuItemRx.Name = "decodeMixedToolStripMenuItemRx";
+            this.decodeMixedToolStripMenuItemRx.Size = new System.Drawing.Size(178, 22);
+            this.decodeMixedToolStripMenuItemRx.Text = "Decode Mixed";
+            this.decodeMixedToolStripMenuItemRx.Click += new System.EventHandler(this.ToolStripMenuItemRxDecodeAuto_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(175, 6);
             // 
             // toolStripMenuItemRxAppendNL
             // 
             this.toolStripMenuItemRxAppendNL.CheckOnClick = true;
             this.toolStripMenuItemRxAppendNL.Name = "toolStripMenuItemRxAppendNL";
-            this.toolStripMenuItemRxAppendNL.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemRxAppendNL.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItemRxAppendNL.Text = "Append Newline";
             this.toolStripMenuItemRxAppendNL.CheckedChanged += new System.EventHandler(this.ToolStripMenuItemRxAppendNL_CheckedChanged);
             // 
@@ -353,14 +367,14 @@
             // 
             this.toolStripMenuItemRxAppendTS.CheckOnClick = true;
             this.toolStripMenuItemRxAppendTS.Name = "toolStripMenuItemRxAppendTS";
-            this.toolStripMenuItemRxAppendTS.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemRxAppendTS.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItemRxAppendTS.Text = "Append Timestamp";
             this.toolStripMenuItemRxAppendTS.CheckedChanged += new System.EventHandler(this.ToolStripMenuItemRxAppendTS_CheckedChanged);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(175, 6);
             // 
             // toolStripMenuItemAutoScroll
             // 
@@ -368,7 +382,7 @@
             this.toolStripMenuItemAutoScroll.CheckOnClick = true;
             this.toolStripMenuItemAutoScroll.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripMenuItemAutoScroll.Name = "toolStripMenuItemAutoScroll";
-            this.toolStripMenuItemAutoScroll.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemAutoScroll.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItemAutoScroll.Text = "Auto Scroll";
             this.toolStripMenuItemAutoScroll.CheckedChanged += new System.EventHandler(this.ToolStripMenuItemAutoScroll_CheckedChanged);
             // 
@@ -378,14 +392,14 @@
             this.toolStripMenuItemWordWrap.CheckOnClick = true;
             this.toolStripMenuItemWordWrap.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripMenuItemWordWrap.Name = "toolStripMenuItemWordWrap";
-            this.toolStripMenuItemWordWrap.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemWordWrap.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItemWordWrap.Text = "Word Wrap";
             this.toolStripMenuItemWordWrap.CheckedChanged += new System.EventHandler(this.ToolStripMenuItemWordWrap_CheckedChanged);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(175, 6);
             // 
             // toolStripMenuItemRxPreserveEventLog
             // 
@@ -393,7 +407,7 @@
             this.toolStripMenuItemRxPreserveEventLog.CheckOnClick = true;
             this.toolStripMenuItemRxPreserveEventLog.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripMenuItemRxPreserveEventLog.Name = "toolStripMenuItemRxPreserveEventLog";
-            this.toolStripMenuItemRxPreserveEventLog.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItemRxPreserveEventLog.Size = new System.Drawing.Size(178, 22);
             this.toolStripMenuItemRxPreserveEventLog.Text = "Preserve History";
             this.toolStripMenuItemRxPreserveEventLog.CheckedChanged += new System.EventHandler(this.ToolStripMenuItemRxPreserveEventLog_CheckedChanged);
             // 
@@ -444,44 +458,25 @@
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.contentsToolStripMenuItem,
-            this.indexToolStripMenuItem,
-            this.searchToolStripMenuItem,
-            this.toolStripSeparator5,
+            this.updateToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "&Help";
-            // 
-            // contentsToolStripMenuItem
-            // 
-            this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
-            this.contentsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.contentsToolStripMenuItem.Text = "&Contents";
-            // 
-            // indexToolStripMenuItem
-            // 
-            this.indexToolStripMenuItem.Name = "indexToolStripMenuItem";
-            this.indexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.indexToolStripMenuItem.Text = "&Index";
-            // 
-            // searchToolStripMenuItem
-            // 
-            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
-            this.searchToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.searchToolStripMenuItem.Text = "&Search";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.ToolStripMenuItemAbout_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            // 
+            // updateToolStripMenuItem
+            // 
+            this.updateToolStripMenuItem.Name = "updateToolStripMenuItem";
+            this.updateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.updateToolStripMenuItem.Text = "&Update...";
+            this.updateToolStripMenuItem.Click += new System.EventHandler(this.UpdateToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -493,7 +488,7 @@
             this.labelRxSelection,
             this.toolStripStatusLabel4,
             this.labelTxSelection});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 739);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 727);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(834, 22);
             this.statusStrip1.TabIndex = 1;
@@ -553,7 +548,7 @@
             this.groupBoxRx.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxRx.Location = new System.Drawing.Point(3, 53);
             this.groupBoxRx.Name = "groupBoxRx";
-            this.groupBoxRx.Size = new System.Drawing.Size(828, 531);
+            this.groupBoxRx.Size = new System.Drawing.Size(828, 519);
             this.groupBoxRx.TabIndex = 6;
             this.groupBoxRx.TabStop = false;
             this.groupBoxRx.Text = "Receive";
@@ -569,7 +564,7 @@
             this.richTextBoxExEventLog.Location = new System.Drawing.Point(3, 16);
             this.richTextBoxExEventLog.Name = "richTextBoxExEventLog";
             this.richTextBoxExEventLog.ReadOnly = true;
-            this.richTextBoxExEventLog.Size = new System.Drawing.Size(822, 512);
+            this.richTextBoxExEventLog.Size = new System.Drawing.Size(822, 500);
             this.richTextBoxExEventLog.TabIndex = 0;
             this.richTextBoxExEventLog.Text = "";
             this.richTextBoxExEventLog.SelectionChanged += new System.EventHandler(this.RichTextBoxExEventLog_SelectionChanged);
@@ -609,7 +604,7 @@
             // 
             this.groupBoxTx.Controls.Add(this.tableLayoutPanel2);
             this.groupBoxTx.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxTx.Location = new System.Drawing.Point(3, 590);
+            this.groupBoxTx.Location = new System.Drawing.Point(3, 578);
             this.groupBoxTx.Name = "groupBoxTx";
             this.groupBoxTx.Size = new System.Drawing.Size(828, 144);
             this.groupBoxTx.TabIndex = 5;
@@ -809,7 +804,6 @@
             this.comboBoxPortName.Name = "comboBoxPortName";
             this.comboBoxPortName.Size = new System.Drawing.Size(100, 23);
             this.comboBoxPortName.DropDown += new System.EventHandler(this.ComboBoxPortList_DropDown);
-            this.comboBoxPortName.DropDownClosed += new System.EventHandler(this.ComboBoxPortName_DropDownClosed);
             this.comboBoxPortName.SelectedIndexChanged += new System.EventHandler(this.ComboBoxPortName_SelectedIndexChanged);
             // 
             // comboBoxBaudRate
@@ -854,7 +848,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(834, 761);
+            this.ClientSize = new System.Drawing.Size(834, 749);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -896,10 +890,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemSetDtrOnConnect;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemOptions;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem contentsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem indexToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem updateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
@@ -918,10 +909,10 @@
         private System.Windows.Forms.ToolStripButton buttonConnect;
         private System.Windows.Forms.ToolStripButton ButtonClear;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.ToolStripMenuItem encodeAutoToolStripMenuItemTx;
+        private System.Windows.Forms.ToolStripMenuItem encodeMixedToolStripMenuItemTx;
         private System.Windows.Forms.ToolStripMenuItem encodeASCIIToolStripMenuItemTx;
         private System.Windows.Forms.ToolStripMenuItem encodeHEXToolStripMenuItemTx;
-        private System.Windows.Forms.ToolStripMenuItem decodeAutoToolStripMenuItemRx;
+        private System.Windows.Forms.ToolStripMenuItem decodeMixedToolStripMenuItemRx;
         private System.Windows.Forms.ToolStripMenuItem decodeASCIIToolStripMenuItemRx;
         private System.Windows.Forms.ToolStripMenuItem decodeHEXToolStripMenuItemRx;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -965,6 +956,8 @@
         private System.Windows.Forms.ToolStripMenuItem copyAllToolStripMenuItemRx;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRxPreserveEventLog;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem appendNewlineToolStripMenuItemTx;
     }
 }
 

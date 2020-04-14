@@ -15,7 +15,7 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_2BE710863CB7F1C84D55C4D1F57AB07B"
+        "MsmKey" = "8:_40E43946BBF56FAB9F4338EDD180D969"
         "OwnerKey" = "8:_C4FDB6520830461E885BDAD3CABFE6E5"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -34,7 +34,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2BE710863CB7F1C84D55C4D1F57AB07B"
+        "OwnerKey" = "8:_40E43946BBF56FAB9F4338EDD180D969"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -122,14 +122,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2BE710863CB7F1C84D55C4D1F57AB07B"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_40E43946BBF56FAB9F4338EDD180D969"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Megamind.IO.Serial, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_2BE710863CB7F1C84D55C4D1F57AB07B"
+                    "_40E43946BBF56FAB9F4338EDD180D969"
                     {
                     "Name" = "8:Megamind.IO.Serial.dll"
                     "Attributes" = "3:512"
@@ -220,15 +220,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Serial COM"
-        "ProductCode" = "8:{7DD5F630-04D5-4A6A-AABC-2D82716AF921}"
-        "PackageCode" = "8:{A52609D6-8B48-417A-A971-C144FE2D903E}"
+        "ProductCode" = "8:{4BE71076-05AE-4CCB-AD55-7CB3DE14E563}"
+        "PackageCode" = "8:{52560CDE-1A9C-4D2E-8228-9C0055A68858}"
         "UpgradeCode" = "8:{9D3C6EE9-FFE0-4C52-A09C-B26A438AD0FE}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.2"
+        "ProductVersion" = "8:1.0.3"
         "Manufacturer" = "8:GSM Project"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -770,7 +770,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C4FDB6520830461E885BDAD3CABFE6E5"
             {
-            "SourcePath" = "8:..\\Serial COM\\obj\\Release\\Serial COM.exe"
+            "SourcePath" = "8:..\\Serial COM\\obj\\Debug\\Serial COM.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C82F6D3705844855A61A03E29185697A"

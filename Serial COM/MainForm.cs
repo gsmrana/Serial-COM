@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Drawing;
 using System.Management;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Megamind.IO.Serial;
@@ -25,10 +26,12 @@ namespace Serial_COM
         #region Data
 
         string ConfigFilename = "Serial COM Config.xml";
+        string EventLogFilename = "Serial COM EventLog.rtf";
 
+        bool _isConnected;
+        int _txSelPosition;
         AppConfig _appConfig;
         SerialCom _serialCom;
-        bool _isConnected;
 
         string[] _portNames = new string[0];
         string[] _portViewNames = new string[0];
@@ -82,6 +85,7 @@ namespace Serial_COM
             richTextBoxExEventLog.WordWrap = toolStripMenuItemWordWrap.Checked = _appConfig.RxWordWrap;
             toolStripMenuItemRxAppendNL.Checked = _appConfig.AppendNlOnRx;
             toolStripMenuItemRxAppendTS.Checked = _appConfig.AppendTsOnRx;
+            toolStripMenuItemRxPreserveEventLog.Checked = _appConfig.PreserveHistory;
 
             this.TopMost = toolStripMenuItemAwaysOnTop.Checked = _appConfig.AlwaysOnTop;
             toolStripMenuItemSetDtrOnConnect.Checked = _appConfig.SetDtrOnConnect;
@@ -102,6 +106,8 @@ namespace Serial_COM
             this.Location = winlocation;
 
             UpdateSendHistotyListView();
+            if (_txSelPosition > 0)
+                richTextBoxTxData.Text = _appConfig.SendHistory[_txSelPosition - 1];
         }
 
         private void SaveAppConfig()
@@ -137,25 +143,31 @@ namespace Serial_COM
 
         private void AppenToSendHistory(string txstr)
         {
+            // remove existing
             var idx = _appConfig.SendHistory.IndexOf(txstr);
-            if (idx >= 0) //already exist in history
+            if (idx >= 0)
                 _appConfig.SendHistory.RemoveAt(idx);
+
+            // remove from first
+            if (_appConfig.SendHistory.Count >= _appConfig.SendHistoryCapacity)
+                _appConfig.SendHistory.RemoveAt(0);
+
             _appConfig.SendHistory.Add(txstr);
             UpdateSendHistotyListView();
         }
 
         private void UpdateSendHistotyListView()
         {
-            _appConfig.SendHistoryCount = _appConfig.SendHistory.Count;
+            _txSelPosition = _appConfig.SendHistory.Count;
             listViewTxHistory.Items.Clear();
-            if (_appConfig.SendHistoryCount <= 0) return;
-            for (int i = 1; i <= _appConfig.SendHistoryCount; i++)
+            if (_txSelPosition <= 0) return;
+            for (int i = 1; i <= _txSelPosition; i++)
             {
                 string[] row = { i.ToString(), _appConfig.SendHistory[i - 1] };
                 var lvitem = new ListViewItem(row);
                 listViewTxHistory.Items.Add(lvitem);
             }
-            listViewTxHistory.Items[_appConfig.SendHistoryCount - 1].EnsureVisible();
+            listViewTxHistory.Items[_txSelPosition - 1].EnsureVisible();
         }
 
         private void MonitorDeviceChanges()
@@ -308,6 +320,7 @@ namespace Serial_COM
             try
             {
                 ConfigFilename = Path.Combine(Application.UserAppDataPath, ConfigFilename);
+                EventLogFilename = Path.Combine(Application.UserAppDataPath, EventLogFilename);
                 LoadAppConfig();
                 UpdateSerialPortNames();
                 comboBoxBaudRate.ComboBox.DataSource = StddBaudRate;
@@ -323,6 +336,11 @@ namespace Serial_COM
             try
             {
                 MonitorDeviceChanges();
+                if (_appConfig.PreserveHistory)
+                {
+                    if (File.Exists(EventLogFilename))
+                        richTextBoxExEventLog.LoadFile(EventLogFilename, RichTextBoxStreamType.RichText);
+                }
                 labelRxSelection.Text = "RxSel: 0";
                 labelTxSelection.Text = "TxSel: 0";
                 toolStripStatusLabel1.Text = "Ready to Connect";
@@ -338,6 +356,8 @@ namespace Serial_COM
             try
             {
                 SaveAppConfig();
+                if (_appConfig.PreserveHistory)
+                    richTextBoxExEventLog.SaveFile(EventLogFilename, RichTextBoxStreamType.RichText);
                 if (_serialCom != null)
                     _serialCom.Dispose();
             }
@@ -362,12 +382,16 @@ namespace Serial_COM
             {
                 using (var sfd = new SaveFileDialog())
                 {
-                    sfd.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
-                    var name = DateTime.Today.ToLongDateString() + "_" + DateTime.Today.ToLongTimeString();
-                    sfd.FileName = name.Replace(':', '-').Replace(',', '-');
+                    sfd.Filter = "Text Files (*.txt)|*.txt|Rich Text Files (*.rtf)|*.rtf|All Files (*.*)|*.*";
+                    var now = DateTime.Today;
+                    var filename = string.Format("Serial COM EventLog {0} - {1}", now.ToLongDateString(), now.ToLongTimeString());
+                    sfd.FileName = filename.Replace(':', '-').Replace(',', '-');
                     if (sfd.ShowDialog() == DialogResult.OK)
                     {
-                        richTextBoxExEventLog.SaveFile(sfd.FileName, RichTextBoxStreamType.PlainText);
+                        if (Path.GetExtension(sfd.FileName) == ".txt")
+                            richTextBoxExEventLog.SaveFile(sfd.FileName, RichTextBoxStreamType.PlainText);
+                        else if (Path.GetExtension(sfd.FileName) == ".rtf")
+                            richTextBoxExEventLog.SaveFile(sfd.FileName, RichTextBoxStreamType.RichText);
                     }
                 }
             }
@@ -384,7 +408,9 @@ namespace Serial_COM
 
         private void ToolStripMenuItemAbout_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Developer - GSM Rana\nwww.gsmrana.com", "About");
+            var app = Assembly.GetExecutingAssembly().GetName();
+            var str = string.Format("{0} v{1} \nDeveloper - GSM Rana\nhttps://github.com/gsmrana", app.Name, app.Version);
+            MessageBox.Show(str, "About");
         }
 
         #endregion
@@ -430,7 +456,7 @@ namespace Serial_COM
             _appConfig.AppendTsOnTx = toolStripMenuItemTxAppendTs.Checked;
         }
 
-        private void ToolStripMenuItemTxSendOnKeyPress_Click(object sender, EventArgs e)
+        private void SendOnKeyPressToolStripMenuItemTx_CheckedChanged(object sender, EventArgs e)
         {
             _appConfig.SendOnKeyPress = sendOnKeyPressToolStripMenuItemTx.Checked;
             if (_appConfig.SendOnKeyPress)
@@ -439,7 +465,8 @@ namespace Serial_COM
                 richTextBoxTxData.Focus();
             }
         }
-        private void SelectAllOnSendToolStripMenuItemTx_Click(object sender, EventArgs e)
+
+        private void SelectAllOnSendToolStripMenuItemTx_CheckedChanged(object sender, EventArgs e)
         {
             _appConfig.SelectAllOnTx = selectAllOnSendToolStripMenuItemTx.Checked;
         }
@@ -472,16 +499,6 @@ namespace Serial_COM
             decodeHEXToolStripMenuItemRx.Checked = true;
         }
 
-        private void ToolStripMenuItemAutoScroll_CheckedChanged(object sender, EventArgs e)
-        {
-            richTextBoxExEventLog.Autoscroll = _appConfig.RxAutoScroll = toolStripMenuItemAutoScroll.Checked;
-        }
-
-        private void ToolStripMenuItemWordWrap_CheckedChanged(object sender, EventArgs e)
-        {
-            richTextBoxExEventLog.WordWrap = _appConfig.RxWordWrap = toolStripMenuItemWordWrap.Checked;
-        }
-
         private void ToolStripMenuItemRxAppendNL_CheckedChanged(object sender, EventArgs e)
         {
             _appConfig.AppendNlOnRx = toolStripMenuItemRxAppendNL.Checked;
@@ -492,9 +509,19 @@ namespace Serial_COM
             _appConfig.AppendTsOnRx = toolStripMenuItemRxAppendTS.Checked;
         }
 
-        private void ToolStripMenuItemRxAppendNL_Click(object sender, EventArgs e)
+        private void ToolStripMenuItemAutoScroll_CheckedChanged(object sender, EventArgs e)
         {
-            _appConfig.AppendNlOnRx = toolStripMenuItemRxAppendNL.Checked;
+            richTextBoxExEventLog.Autoscroll = _appConfig.RxAutoScroll = toolStripMenuItemAutoScroll.Checked;
+        }
+
+        private void ToolStripMenuItemWordWrap_CheckedChanged(object sender, EventArgs e)
+        {
+            richTextBoxExEventLog.WordWrap = _appConfig.RxWordWrap = toolStripMenuItemWordWrap.Checked;
+        }
+
+        private void ToolStripMenuItemRxPreserveEventLog_CheckedChanged(object sender, EventArgs e)
+        {
+            _appConfig.PreserveHistory = toolStripMenuItemRxPreserveEventLog.Checked;
         }
 
         #endregion
@@ -692,6 +719,11 @@ namespace Serial_COM
             Clipboard.SetText(richTextBoxExEventLog.Text);
         }
 
+        private void ClearAllToolStripMenuItemRx_Click(object sender, EventArgs e)
+        {
+            richTextBoxExEventLog.Clear();
+        }
+
         #endregion
 
         #region Tx Context Menu
@@ -717,34 +749,25 @@ namespace Serial_COM
             richTextBoxTxData.Paste();
         }
 
-        private void SelectAllToolStripMenuItemTx_Click(object sender, EventArgs e)
+        private void ClearAllToolStripMenuItemTx_Click(object sender, EventArgs e)
         {
-            richTextBoxTxData.SelectAll();
+            richTextBoxTxData.Clear();
         }
 
         #endregion
 
-        #region Send History Context Menu
-
-        private void ListViewTxHistory_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (listViewTxHistory.SelectedIndices.Count <= 0) return;
-                var idx = listViewTxHistory.SelectedIndices[0];
-                if (idx < _appConfig.SendHistory.Count)
-                    richTextBoxTxData.Text = _appConfig.SendHistory[idx];
-            }
-            catch (Exception ex)
-            {
-                PopupException(ex.Message);
-            }
-        }
+        #region Send History Events
 
         private void ContextMenuStripTxHistory_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            removeToolStripMenuItem.Enabled = listViewTxHistory.SelectedIndices.Count > 0;
-            removeAllToolStripMenuItem.Enabled = listViewTxHistory.Items.Count > 0;
+            sendToolStripMenuItemTxHist.Enabled = listViewTxHistory.SelectedIndices.Count > 0;
+            removeToolStripMenuItemTxHist.Enabled = listViewTxHistory.SelectedIndices.Count > 0;
+            removeAllToolStripMenuItemTxHist.Enabled = listViewTxHistory.Items.Count > 0;
+        }
+
+        private void SendToolStripMenuItemTxHist_Click(object sender, EventArgs e)
+        {
+            buttonSend.PerformClick();
         }
 
         private void RemoveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -778,10 +801,6 @@ namespace Serial_COM
             }
         }
 
-        #endregion
-
-        #region Sending Data
-
         private void RichTextBoxTxData_KeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -795,8 +814,8 @@ namespace Serial_COM
                 {
                     if (_appConfig.SendHistory.Count > 0)
                     {
-                        if (_appConfig.SendHistoryCount > 1) _appConfig.SendHistoryCount--;
-                        richTextBoxTxData.Text = _appConfig.SendHistory[_appConfig.SendHistoryCount - 1];
+                        if (_txSelPosition > 1) _txSelPosition--;
+                        richTextBoxTxData.Text = _appConfig.SendHistory[_txSelPosition - 1];
                     }
                     e.Handled = true;
                 }
@@ -804,8 +823,8 @@ namespace Serial_COM
                 {
                     if (_appConfig.SendHistory.Count > 0)
                     {
-                        if (_appConfig.SendHistoryCount < _appConfig.SendHistory.Count) _appConfig.SendHistoryCount++;
-                        richTextBoxTxData.Text = _appConfig.SendHistory[_appConfig.SendHistoryCount - 1];
+                        if (_txSelPosition < _appConfig.SendHistory.Count) _txSelPosition++;
+                        richTextBoxTxData.Text = _appConfig.SendHistory[_txSelPosition - 1];
                     }
                     e.Handled = true;
                 }
@@ -823,8 +842,6 @@ namespace Serial_COM
 
         private void RichTextBoxTxData_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!_isConnected) return;
-
             try
             {
                 if (_appConfig.SendOnKeyPress)
@@ -849,6 +866,25 @@ namespace Serial_COM
             }
         }
 
+        private void ListViewTxHistory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (listViewTxHistory.SelectedIndices.Count <= 0) return;
+                var idx = listViewTxHistory.SelectedIndices[0];
+                if (idx < _appConfig.SendHistory.Count)
+                    richTextBoxTxData.Text = _appConfig.SendHistory[idx];
+            }
+            catch (Exception ex)
+            {
+                PopupException(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Sending Data
+
         private void ListViewTxHistory_DoubleClick(object sender, EventArgs e)
         {
             buttonSend.PerformClick();
@@ -858,7 +894,7 @@ namespace Serial_COM
         {
             try
             {
-                if (!_isConnected) throw new Exception("Please Connect First!");
+                if (!_isConnected) throw new Exception("COM port is not connected!");
 
                 var txstr = richTextBoxTxData.Text;
                 if (string.IsNullOrEmpty(txstr)) return;
@@ -978,6 +1014,8 @@ namespace Serial_COM
 
     }
 
+    #region Property Class
+
     public class WmiSerialPortInfo
     {
         public string Name { get; set; }
@@ -988,5 +1026,7 @@ namespace Serial_COM
             get => string.Format("{0} - {1} | {2}", Name, Description, Manufacturer);
         }
     }
+
+    #endregion
 
 }

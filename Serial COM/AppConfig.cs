@@ -32,6 +32,7 @@ namespace Serial_COM
         public bool AppendTsOnRx { get; set; }
         public bool RxAutoScroll { get; set; } = true;
         public bool RxWordWrap { get; set; } = true;
+        public bool PreserveHistory { get; set; } = true;
 
         public bool AlwaysOnTop { get; set; }
         public bool SetDtrOnConnect { get; set; }
@@ -43,7 +44,7 @@ namespace Serial_COM
         public Size WindowSize { get; set; } = new Size();
         public Point WindowLocation { get; set; } = new Point();
 
-        public int SendHistoryCount { get; set; }
+        public int SendHistoryCapacity { get; set; } = 100;
         public List<string> SendHistory { get; } = new List<string>();
 
         public static AppConfig Load(string filename)

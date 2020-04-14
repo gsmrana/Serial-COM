@@ -15,7 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_40E43946BBF56FAB9F4338EDD180D969"
+        "MsmKey" = "8:_0C74AECDFC717604182DD498602CE39E"
+        "OwnerKey" = "8:_C4FDB6520830461E885BDAD3CABFE6E5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_2BE710863CB7F1C84D55C4D1F57AB07B"
         "OwnerKey" = "8:_C4FDB6520830461E885BDAD3CABFE6E5"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -27,6 +33,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F065A733F5377A9F2F99880230FBA8F0"
+        "OwnerKey" = "8:_C4FDB6520830461E885BDAD3CABFE6E5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_F065A733F5377A9F2F99880230FBA8F0"
+        "OwnerKey" = "8:_0C74AECDFC717604182DD498602CE39E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C4FDB6520830461E885BDAD3CABFE6E5"
         "MsmSig" = "8:_UNDEFINED"
@@ -34,7 +52,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_40E43946BBF56FAB9F4338EDD180D969"
+        "OwnerKey" = "8:_0C74AECDFC717604182DD498602CE39E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F065A733F5377A9F2F99880230FBA8F0"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2BE710863CB7F1C84D55C4D1F57AB07B"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -122,20 +152,82 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_40E43946BBF56FAB9F4338EDD180D969"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0C74AECDFC717604182DD498602CE39E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Octokit, Version=0.47.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_0C74AECDFC717604182DD498602CE39E"
+                    {
+                    "Name" = "8:Octokit.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Octokit.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C82F6D3705844855A61A03E29185697A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2BE710863CB7F1C84D55C4D1F57AB07B"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Megamind.IO.Serial, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_40E43946BBF56FAB9F4338EDD180D969"
+                    "_2BE710863CB7F1C84D55C4D1F57AB07B"
                     {
                     "Name" = "8:Megamind.IO.Serial.dll"
                     "Attributes" = "3:512"
                     }
                 }
             "SourcePath" = "8:Megamind.IO.Serial.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C82F6D3705844855A61A03E29185697A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F065A733F5377A9F2F99880230FBA8F0"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_F065A733F5377A9F2F99880230FBA8F0"
+                    {
+                    "Name" = "8:System.Net.Http.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Net.Http.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C82F6D3705844855A61A03E29185697A"
@@ -220,15 +312,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Serial COM"
-        "ProductCode" = "8:{4BE71076-05AE-4CCB-AD55-7CB3DE14E563}"
-        "PackageCode" = "8:{52560CDE-1A9C-4D2E-8228-9C0055A68858}"
+        "ProductCode" = "8:{6D209E9A-6CCF-4BEC-A2B7-4C200C0A67AC}"
+        "PackageCode" = "8:{4F7E2B36-29B9-4A9F-8AD6-781AE86A9FE2}"
         "UpgradeCode" = "8:{9D3C6EE9-FFE0-4C52-A09C-B26A438AD0FE}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.3"
+        "ProductVersion" = "8:1.0.4"
         "Manufacturer" = "8:GSM Project"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -770,7 +862,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C4FDB6520830461E885BDAD3CABFE6E5"
             {
-            "SourcePath" = "8:..\\Serial COM\\obj\\Debug\\Serial COM.exe"
+            "SourcePath" = "8:..\\Serial COM\\obj\\Release\\Serial COM.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C82F6D3705844855A61A03E29185697A"

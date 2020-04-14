@@ -613,6 +613,7 @@ namespace Serial_COM
                 var message = ex.Message;
                 if (ex.InnerException != null)
                     message = ex.InnerException.Message;
+                UpdateStatusLabel("Update Exception: " + message);
                 PopupException(message, "Update Exception");
                 Process.Start("https://github.com/gsmrana/Serial-COM/releases");
             }

@@ -9,6 +9,8 @@ namespace Serial_COM
 {
     public class AppUpdater
     {
+        #region Data
+
         readonly string _username;
         readonly string _projectname;
         string _installerFilename;
@@ -18,6 +20,10 @@ namespace Serial_COM
 
         public delegate void DownloadCompletedHandler();
         public event DownloadCompletedHandler OnDownlodCompleted;
+
+        #endregion
+
+        #region Public Methods
 
         public AppUpdater(string username, string projectname)
         {
@@ -39,10 +45,15 @@ namespace Serial_COM
             {
                 var message = string.Format("A new version {0} is available!\rDo you want to download and install?", release.TagName);
                 var result = MessageBox.Show(message, "Update Confirmation", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-                if (result != DialogResult.Yes) return;
+                if (result != DialogResult.Yes)
+                {
+                    UpdateStatus("App update is canceled by user!");
+                    return;
+                }
             }
             else
             {
+                UpdateStatus("Already using the latest version!");
                 MessageBox.Show("You are already using the latest version!", "Update Check",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -58,6 +69,10 @@ namespace Serial_COM
                 webclient.DownloadFileAsync(new Uri(release.Assets.FirstOrDefault().BrowserDownloadUrl), _installerFilename);
             }
         }
+
+        #endregion
+
+        #region Internal Methods
 
         private void UpdateStatus(string message)
         {
@@ -82,7 +97,7 @@ namespace Serial_COM
             try
             {
                 if (e.Error != null) throw e.Error;
-                UpdateStatus("Installing: " + Path.GetFileName(_installerFilename));
+                UpdateStatus("Installing... " + Path.GetFileName(_installerFilename));
                 Process.Start(_installerFilename);
                 OnDownlodCompleted?.Invoke();
             }
@@ -91,6 +106,8 @@ namespace Serial_COM
                 UpdateStatus("Download Exception: " + ex.Message);
             }
         }
+
+        #endregion
 
     }
 }
